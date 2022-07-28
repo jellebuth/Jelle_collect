@@ -20,6 +20,8 @@ cdef class TradingIntensityIndicator:
         list _last_quotes
         int _sampling_length
         int _samples_length
+        object _round
+        object _current_timestamp
 
     cdef c_calculate(self, timestamp)
     cdef c_register_trade(self, object trade)
