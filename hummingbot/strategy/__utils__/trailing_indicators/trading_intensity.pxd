@@ -10,8 +10,10 @@ from hummingbot.core.event.event_listener cimport EventListener
 
 cdef class TradingIntensityIndicator:
     cdef:
-        double _alpha
-        double _kappa
+        double _alpha_buy
+        double _kappa_buy
+        double _alpha_sell
+        double _kappa_sell
         dict _trade_samples
         list _current_trade_sample
         object _trades_forwarder

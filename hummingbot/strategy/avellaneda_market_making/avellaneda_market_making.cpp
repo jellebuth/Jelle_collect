@@ -9,8 +9,8 @@
             "hummingbot/core/cpp/PyRef.h"
         ],
         "include_dirs": [
-            "./hummingbot/core",
-            "./hummingbot/core/data_type"
+            "./hummingbot/core/data_type",
+            "./hummingbot/core"
         ],
         "language": "c++",
         "name": "hummingbot.strategy.avellaneda_market_making.avellaneda_market_making",
@@ -1669,13 +1669,15 @@ struct __pyx_obj_10hummingbot_4core_9data_type_10order_book_OrderBook {
  * 
  * cdef class TradingIntensityIndicator:             # <<<<<<<<<<<<<<
  *     cdef:
- *         double _alpha
+ *         double _alpha_buy
  */
 struct __pyx_obj_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator {
   PyObject_HEAD
   struct __pyx_vtabstruct_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator *__pyx_vtab;
-  double _alpha;
-  double _kappa;
+  double _alpha_buy;
+  double _kappa_buy;
+  double _alpha_sell;
+  double _kappa_sell;
   PyObject *_trade_samples;
   PyObject *_current_trade_sample;
   PyObject *_trades_forwarder;
@@ -1689,7 +1691,7 @@ struct __pyx_obj_10hummingbot_8strategy_9__utils___19trailing_indicators_17tradi
 };
 
 
-/* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pxd":30
+/* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pxd":32
  *     cdef c_estimate_intensity(self)
  * 
  * cdef class TradesForwarder(EventListener):             # <<<<<<<<<<<<<<
@@ -2095,7 +2097,7 @@ static struct __pyx_vtabstruct_10hummingbot_4core_9data_type_10order_book_OrderB
  * 
  * cdef class TradingIntensityIndicator:             # <<<<<<<<<<<<<<
  *     cdef:
- *         double _alpha
+ *         double _alpha_buy
  */
 
 struct __pyx_vtabstruct_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator {
@@ -2106,7 +2108,7 @@ struct __pyx_vtabstruct_10hummingbot_8strategy_9__utils___19trailing_indicators_
 static struct __pyx_vtabstruct_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator *__pyx_vtabptr_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator;
 
 
-/* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pxd":30
+/* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pxd":32
  *     cdef c_estimate_intensity(self)
  * 
  * cdef class TradesForwarder(EventListener):             # <<<<<<<<<<<<<<
@@ -45421,8 +45423,8 @@ static int __Pyx_modinit_type_import_code(void) {
    if (!__pyx_ptype_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator) __PYX_ERR(8, 11, __pyx_L1_error)
   __pyx_vtabptr_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator = (struct __pyx_vtabstruct_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator*)__Pyx_GetVtable(__pyx_ptype_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator); if (unlikely(!__pyx_vtabptr_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradingIntensityIndicator)) __PYX_ERR(8, 11, __pyx_L1_error)
   __pyx_ptype_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder = __Pyx_ImportType(__pyx_t_1, "hummingbot.strategy.__utils__.trailing_indicators.trading_intensity", "TradesForwarder", sizeof(struct __pyx_obj_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder), __Pyx_ImportType_CheckSize_Warn);
-   if (!__pyx_ptype_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder) __PYX_ERR(8, 30, __pyx_L1_error)
-  __pyx_vtabptr_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder = (struct __pyx_vtabstruct_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder*)__Pyx_GetVtable(__pyx_ptype_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder); if (unlikely(!__pyx_vtabptr_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder)) __PYX_ERR(8, 30, __pyx_L1_error)
+   if (!__pyx_ptype_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder) __PYX_ERR(8, 32, __pyx_L1_error)
+  __pyx_vtabptr_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder = (struct __pyx_vtabstruct_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder*)__Pyx_GetVtable(__pyx_ptype_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder); if (unlikely(!__pyx_vtabptr_10hummingbot_8strategy_9__utils___19trailing_indicators_17trading_intensity_TradesForwarder)) __PYX_ERR(8, 32, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = PyImport_ImportModule("hummingbot.core.clock"); if (unlikely(!__pyx_t_1)) __PYX_ERR(9, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
