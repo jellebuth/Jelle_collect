@@ -1,5 +1,12 @@
 # distutils: language=c++
 # distutils: sources=hummingbot/core/cpp/OrderBookEntry.cpp
+from hummingbot.core.data_type.common import (
+    OrderType,
+    PriceType,
+    TradeType
+)
+
+
 
 import warnings
 from decimal import Decimal
@@ -106,7 +113,8 @@ cdef class TradingIntensityIndicator:
                         latest_processed_quote_idx = i
                     #here is where we can store the data
                     trade_price = trade.price
-                    side = trade.type.is_buy
+                    side = trade.type
+                    buy = trade.type == TradeType.BUY
                     amount = trade.amount
                     price_level = abs(trade.price - float(quote["price"]))
 
@@ -128,7 +136,7 @@ cdef class TradingIntensityIndicator:
                     else:
                         df_header = pd.DataFrame([('timestamp',
                                                     'trade_price',
-                                                    'side',
+                                                    'buy',
                                                     'mid_price',
                                                     'price_level',
                                                     'amount')])
@@ -136,7 +144,7 @@ cdef class TradingIntensityIndicator:
 
                     df = pd.DataFrame([(timestamp,
                                         trade_price,
-                                        side,
+                                        buy,
                                         mid_price,
                                         price_level,
                                         amount)])
