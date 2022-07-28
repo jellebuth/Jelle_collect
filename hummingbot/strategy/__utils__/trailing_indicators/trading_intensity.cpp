@@ -8,8 +8,8 @@
             "hummingbot/core/cpp/PyRef.h"
         ],
         "include_dirs": [
-            "./hummingbot/core/data_type",
-            "./hummingbot/core"
+            "./hummingbot/core",
+            "./hummingbot/core/data_type"
         ],
         "language": "c++",
         "name": "hummingbot.strategy.__utils__.trailing_indicators.trading_intensity",
@@ -2885,6 +2885,7 @@ static const char __pyx_k_exists[] = "exists";
 static const char __pyx_k_header[] = "header";
 static const char __pyx_k_ignore[] = "ignore";
 static const char __pyx_k_import[] = "__import__";
+static const char __pyx_k_is_buy[] = "is_buy";
 static const char __pyx_k_logger[] = "logger";
 static const char __pyx_k_method[] = "method";
 static const char __pyx_k_pandas[] = "pandas";
@@ -2961,8 +2962,8 @@ static const char __pyx_k_hummingbot_core_event_events[] = "hummingbot.core.even
 static const char __pyx_k_pyx_unpickle_TradesForwarder[] = "__pyx_unpickle_TradesForwarder";
 static const char __pyx_k_pyx_unpickle_TradingIntensityI[] = "__pyx_unpickle_TradingIntensityIndicator";
 static const char __pyx_k_TradesForwarder___reduce_cython[] = "TradesForwarder.__reduce_cython__";
-static const char __pyx_k_Users_jellebuth_Documents_curve[] = "/Users/jellebuth/Documents/curvefit_hotcross.csv";
-static const char __pyx_k_Users_jellebuth_Documents_trade[] = "/Users/jellebuth/Documents/tradeinfo_hotcross.csv";
+static const char __pyx_k_Users_jellebuth_Documents_curve[] = "/Users/jellebuth/Documents/curvefit_test.csv";
+static const char __pyx_k_Users_jellebuth_Documents_trade[] = "/Users/jellebuth/Documents/tradeinfo_test.csv";
 static const char __pyx_k_hummingbot_core_data_type_order[] = "hummingbot.core.data_type.order_book";
 static const char __pyx_k_hummingbot_strategy_asset_price[] = "hummingbot.strategy.asset_price_delegate";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
@@ -3049,6 +3050,7 @@ static PyObject *__pyx_n_s_indicator;
 static PyObject *__pyx_n_s_inf;
 static PyObject *__pyx_n_s_info;
 static PyObject *__pyx_n_s_initializing;
+static PyObject *__pyx_n_s_is_buy;
 static PyObject *__pyx_n_s_is_coroutine;
 static PyObject *__pyx_n_s_is_sampling_buffer_full;
 static PyObject *__pyx_kp_u_isenabled;
@@ -3290,6 +3292,7 @@ typedef struct {
   PyObject *__pyx_n_s_inf;
   PyObject *__pyx_n_s_info;
   PyObject *__pyx_n_s_initializing;
+  PyObject *__pyx_n_s_is_buy;
   PyObject *__pyx_n_s_is_coroutine;
   PyObject *__pyx_n_s_is_sampling_buffer_full;
   PyObject *__pyx_kp_u_isenabled;
@@ -3520,6 +3523,7 @@ static int __pyx_m_clear(PyObject *m) {
   Py_CLEAR(clear_module_state->__pyx_n_s_inf);
   Py_CLEAR(clear_module_state->__pyx_n_s_info);
   Py_CLEAR(clear_module_state->__pyx_n_s_initializing);
+  Py_CLEAR(clear_module_state->__pyx_n_s_is_buy);
   Py_CLEAR(clear_module_state->__pyx_n_s_is_coroutine);
   Py_CLEAR(clear_module_state->__pyx_n_s_is_sampling_buffer_full);
   Py_CLEAR(clear_module_state->__pyx_kp_u_isenabled);
@@ -3737,6 +3741,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
   Py_VISIT(traverse_module_state->__pyx_n_s_inf);
   Py_VISIT(traverse_module_state->__pyx_n_s_info);
   Py_VISIT(traverse_module_state->__pyx_n_s_initializing);
+  Py_VISIT(traverse_module_state->__pyx_n_s_is_buy);
   Py_VISIT(traverse_module_state->__pyx_n_s_is_coroutine);
   Py_VISIT(traverse_module_state->__pyx_n_s_is_sampling_buffer_full);
   Py_VISIT(traverse_module_state->__pyx_kp_u_isenabled);
@@ -3951,6 +3956,7 @@ static int __pyx_m_traverse(PyObject *m, visitproc visit, void *arg) {
 #define __pyx_n_s_inf __pyx_mstate_global->__pyx_n_s_inf
 #define __pyx_n_s_info __pyx_mstate_global->__pyx_n_s_info
 #define __pyx_n_s_initializing __pyx_mstate_global->__pyx_n_s_initializing
+#define __pyx_n_s_is_buy __pyx_mstate_global->__pyx_n_s_is_buy
 #define __pyx_n_s_is_coroutine __pyx_mstate_global->__pyx_n_s_is_coroutine
 #define __pyx_n_s_is_sampling_buffer_full __pyx_mstate_global->__pyx_n_s_is_sampling_buffer_full
 #define __pyx_kp_u_isenabled __pyx_mstate_global->__pyx_kp_u_isenabled
@@ -5973,7 +5979,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  *                         latest_processed_quote_idx = i
  *                     #here is where we can store the data
  *                     trade_price = trade.price             # <<<<<<<<<<<<<<
- *                     side = trade.type
+ *                     side = trade.type.is_buy
  *                     amount = trade.amount
  */
         __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_price); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 108, __pyx_L1_error)
@@ -5984,48 +5990,51 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":109
  *                     #here is where we can store the data
  *                     trade_price = trade.price
- *                     side = trade.type             # <<<<<<<<<<<<<<
+ *                     side = trade.type.is_buy             # <<<<<<<<<<<<<<
  *                     amount = trade.amount
  *                     price_level = abs(trade.price - float(quote["price"]))
  */
         __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_type); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 109, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __Pyx_XDECREF_SET(__pyx_v_side, __pyx_t_9);
-        __pyx_t_9 = 0;
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_is_buy); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 109, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_XDECREF_SET(__pyx_v_side, __pyx_t_8);
+        __pyx_t_8 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":110
  *                     trade_price = trade.price
- *                     side = trade.type
+ *                     side = trade.type.is_buy
  *                     amount = trade.amount             # <<<<<<<<<<<<<<
  *                     price_level = abs(trade.price - float(quote["price"]))
  * 
  */
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_amount); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 110, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __Pyx_XDECREF_SET(__pyx_v_amount, __pyx_t_9);
-        __pyx_t_9 = 0;
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_amount); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 110, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_XDECREF_SET(__pyx_v_amount, __pyx_t_8);
+        __pyx_t_8 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":111
- *                     side = trade.type
+ *                     side = trade.type.is_buy
  *                     amount = trade.amount
  *                     price_level = abs(trade.price - float(quote["price"]))             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_price); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_price); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_price); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 111, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_price); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 111, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_3 = __Pyx_PyNumber_Float(__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyNumber_Float(__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __pyx_t_8 = PyNumber_Subtract(__pyx_t_9, __pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 111, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyNumber_Absolute(__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_9 = PyNumber_Subtract(__pyx_t_8, __pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_t_3 = __Pyx_PyNumber_Absolute(__pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 111, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_XDECREF_SET(__pyx_v_price_level, __pyx_t_3);
         __pyx_t_3 = 0;
 
@@ -6038,20 +6047,20 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  */
         __pyx_t_3 = __Pyx_PyDict_NewPresized(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 114, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_price); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 114, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_price); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 114, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_price); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 114, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_price); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 114, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_13 = __Pyx_PyNumber_Float(__pyx_t_9); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 114, __pyx_L1_error)
+        __pyx_t_13 = __Pyx_PyNumber_Float(__pyx_t_8); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 114, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __pyx_t_9 = PyNumber_Subtract(__pyx_t_8, __pyx_t_13); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 114, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-        __pyx_t_13 = __Pyx_PyNumber_Absolute(__pyx_t_9); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 114, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_13);
+        __pyx_t_8 = PyNumber_Subtract(__pyx_t_9, __pyx_t_13); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 114, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        __pyx_t_13 = __Pyx_PyNumber_Absolute(__pyx_t_8); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 114, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         if (PyDict_SetItem(__pyx_t_3, __pyx_n_u_price_level, __pyx_t_13) < 0) __PYX_ERR(0, 114, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_trade, __pyx_n_s_amount); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 114, __pyx_L1_error)
@@ -6100,11 +6109,11 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
           }
           __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_timestamp); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 117, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
-          __pyx_t_9 = __Pyx_PyInt_AddObjC(__pyx_t_13, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 117, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_9);
+          __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_t_13, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 117, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-          if (unlikely((PyDict_SetItem(__pyx_v_self->_trade_samples, __pyx_t_9, __pyx_t_3) < 0))) __PYX_ERR(0, 117, __pyx_L1_error)
-          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+          if (unlikely((PyDict_SetItem(__pyx_v_self->_trade_samples, __pyx_t_8, __pyx_t_3) < 0))) __PYX_ERR(0, 117, __pyx_L1_error)
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
           /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":116
@@ -6131,31 +6140,31 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
         __pyx_t_14 = __pyx_v_self->_trade_samples;
         __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_timestamp); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_9 = __Pyx_PyInt_AddObjC(__pyx_t_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 119, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_t_3, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 119, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         if (unlikely(__pyx_t_14 == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
           __PYX_ERR(0, 119, __pyx_L1_error)
         }
-        __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_t_14, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_t_14, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
         __pyx_t_13 = PyList_New(1); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 119, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
         __Pyx_INCREF(__pyx_v_trade);
         __Pyx_GIVEREF(__pyx_v_trade);
         PyList_SET_ITEM(__pyx_t_13, 0, __pyx_v_trade);
-        __pyx_t_8 = PyNumber_InPlaceAdd(__pyx_t_3, __pyx_t_13); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 119, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_9 = PyNumber_InPlaceAdd(__pyx_t_3, __pyx_t_13); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 119, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         if (unlikely(__pyx_t_14 == Py_None)) {
           PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
           __PYX_ERR(0, 119, __pyx_L1_error)
         }
-        if (unlikely((PyDict_SetItem(__pyx_t_14, __pyx_t_9, __pyx_t_8) < 0))) __PYX_ERR(0, 119, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        if (unlikely((PyDict_SetItem(__pyx_t_14, __pyx_t_8, __pyx_t_9) < 0))) __PYX_ERR(0, 119, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":121
@@ -6165,10 +6174,10 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  *                     timestamp_plus = quote["timestamp"] + 1
  *                     mid_price = quote["price"]
  */
-        __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_timestamp); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 121, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __Pyx_DECREF_SET(__pyx_v_timestamp, __pyx_t_9);
-        __pyx_t_9 = 0;
+        __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_timestamp); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 121, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __Pyx_DECREF_SET(__pyx_v_timestamp, __pyx_t_8);
+        __pyx_t_8 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":122
  * 
@@ -6177,13 +6186,13 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  *                     mid_price = quote["price"]
  * 
  */
-        __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_timestamp); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 122, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_8 = __Pyx_PyInt_AddObjC(__pyx_t_9, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 122, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_timestamp); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 122, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __Pyx_XDECREF_SET(__pyx_v_timestamp_plus, __pyx_t_8);
-        __pyx_t_8 = 0;
+        __pyx_t_9 = __Pyx_PyInt_AddObjC(__pyx_t_8, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 122, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __Pyx_XDECREF_SET(__pyx_v_timestamp_plus, __pyx_t_9);
+        __pyx_t_9 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":123
  *                     timestamp = quote["timestamp"]
@@ -6192,48 +6201,48 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  * 
  * 
  */
-        __pyx_t_8 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_price); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 123, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
-        __Pyx_XDECREF_SET(__pyx_v_mid_price, __pyx_t_8);
-        __pyx_t_8 = 0;
+        __pyx_t_9 = __Pyx_PyObject_Dict_GetItem(__pyx_v_quote, __pyx_n_u_price); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 123, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_XDECREF_SET(__pyx_v_mid_price, __pyx_t_9);
+        __pyx_t_9 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":126
  * 
  * 
- *                     if os.path.exists('/Users/jellebuth/Documents/tradeinfo_hotcross.csv'):             # <<<<<<<<<<<<<<
+ *                     if os.path.exists('/Users/jellebuth/Documents/tradeinfo_test.csv'):             # <<<<<<<<<<<<<<
  *                       pass
  *                     else:
  */
-        __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_os); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 126, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_path); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 126, __pyx_L1_error)
+        __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_os); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 126, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_path); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 126, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_exists); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 126, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_exists); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 126, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_8);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_t_13 = NULL;
         __pyx_t_5 = 0;
-        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_9))) {
-          __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_9);
+        if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_8))) {
+          __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_8);
           if (likely(__pyx_t_13)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
             __Pyx_INCREF(__pyx_t_13);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_9, function);
+            __Pyx_DECREF_SET(__pyx_t_8, function);
             __pyx_t_5 = 1;
           }
         }
         {
           PyObject *__pyx_callargs[2] = {__pyx_t_13, __pyx_kp_u_Users_jellebuth_Documents_trade};
-          __pyx_t_8 = __Pyx_PyObject_FastCall(__pyx_t_9, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
+          __pyx_t_9 = __Pyx_PyObject_FastCall(__pyx_t_8, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
           __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
-          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 126, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
-          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 126, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_9);
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         }
-        __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_8); if (unlikely((__pyx_t_12 < 0))) __PYX_ERR(0, 126, __pyx_L1_error)
-        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_9); if (unlikely((__pyx_t_12 < 0))) __PYX_ERR(0, 126, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         if (__pyx_t_12) {
           goto __pyx_L12;
         }
@@ -6246,16 +6255,16 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  *                                                     'side',
  */
         /*else*/ {
-          __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_pd); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 129, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_9);
-          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 129, __pyx_L1_error)
+          __Pyx_GetModuleGlobalName(__pyx_t_8, __pyx_n_s_pd); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 129, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
+          __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 129, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
-          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-          __pyx_t_9 = PyList_New(1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 129, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_9);
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          __pyx_t_8 = PyList_New(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 129, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
           __Pyx_INCREF(__pyx_tuple_);
           __Pyx_GIVEREF(__pyx_tuple_);
-          PyList_SET_ITEM(__pyx_t_9, 0, __pyx_tuple_);
+          PyList_SET_ITEM(__pyx_t_8, 0, __pyx_tuple_);
           __pyx_t_3 = NULL;
           __pyx_t_5 = 0;
           if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_13))) {
@@ -6269,41 +6278,41 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
             }
           }
           {
-            PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_t_9};
-            __pyx_t_8 = __Pyx_PyObject_FastCall(__pyx_t_13, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
+            PyObject *__pyx_callargs[2] = {__pyx_t_3, __pyx_t_8};
+            __pyx_t_9 = __Pyx_PyObject_FastCall(__pyx_t_13, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
             __Pyx_XDECREF(__pyx_t_3); __pyx_t_3 = 0;
-            __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-            if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 129, __pyx_L1_error)
-            __Pyx_GOTREF(__pyx_t_8);
+            __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+            if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 129, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_9);
             __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
           }
-          __Pyx_XDECREF_SET(__pyx_v_df_header, __pyx_t_8);
-          __pyx_t_8 = 0;
+          __Pyx_XDECREF_SET(__pyx_v_df_header, __pyx_t_9);
+          __pyx_t_9 = 0;
 
           /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":135
  *                                                     'price_level',
  *                                                     'amount')])
- *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
+ *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
  * 
  *                     df = pd.DataFrame([(timestamp,
  */
-          __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_df_header, __pyx_n_s_to_csv); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 135, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_8);
+          __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_df_header, __pyx_n_s_to_csv); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 135, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_9);
           __pyx_t_13 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 135, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           if (PyDict_SetItem(__pyx_t_13, __pyx_n_s_mode, __pyx_n_u_a) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
           if (PyDict_SetItem(__pyx_t_13, __pyx_n_s_header, Py_False) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
           if (PyDict_SetItem(__pyx_t_13, __pyx_n_s_index, Py_False) < 0) __PYX_ERR(0, 135, __pyx_L1_error)
-          __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__2, __pyx_t_13); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 135, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_9);
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+          __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_tuple__2, __pyx_t_13); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 135, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+          __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         }
         __pyx_L12:;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":137
- *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)
+ *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
  * 
  *                     df = pd.DataFrame([(timestamp,             # <<<<<<<<<<<<<<
  *                                         trade_price,
@@ -6311,8 +6320,8 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  */
         __Pyx_GetModuleGlobalName(__pyx_t_13, __pyx_n_s_pd); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 137, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
-        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 137, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_8);
+        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_DataFrame); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 137, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":142
@@ -6320,7 +6329,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  *                                         price_level,
  *                                         amount)])             # <<<<<<<<<<<<<<
  * 
- *                     df.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)
+ *                     df.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
  */
         __pyx_t_13 = PyTuple_New(6); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 137, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_13);
@@ -6344,7 +6353,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
         PyTuple_SET_ITEM(__pyx_t_13, 5, __pyx_v_amount);
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":137
- *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)
+ *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
  * 
  *                     df = pd.DataFrame([(timestamp,             # <<<<<<<<<<<<<<
  *                                         trade_price,
@@ -6357,46 +6366,46 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
         __pyx_t_13 = 0;
         __pyx_t_13 = NULL;
         __pyx_t_5 = 0;
-        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_8))) {
-          __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_8);
+        if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_9))) {
+          __pyx_t_13 = PyMethod_GET_SELF(__pyx_t_9);
           if (likely(__pyx_t_13)) {
-            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_8);
+            PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_9);
             __Pyx_INCREF(__pyx_t_13);
             __Pyx_INCREF(function);
-            __Pyx_DECREF_SET(__pyx_t_8, function);
+            __Pyx_DECREF_SET(__pyx_t_9, function);
             __pyx_t_5 = 1;
           }
         }
         {
           PyObject *__pyx_callargs[2] = {__pyx_t_13, __pyx_t_3};
-          __pyx_t_9 = __Pyx_PyObject_FastCall(__pyx_t_8, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
+          __pyx_t_8 = __Pyx_PyObject_FastCall(__pyx_t_9, __pyx_callargs+1-__pyx_t_5, 1+__pyx_t_5);
           __Pyx_XDECREF(__pyx_t_13); __pyx_t_13 = 0;
           __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-          if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 137, __pyx_L1_error)
-          __Pyx_GOTREF(__pyx_t_9);
-          __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 137, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_8);
+          __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         }
-        __Pyx_XDECREF_SET(__pyx_v_df, __pyx_t_9);
-        __pyx_t_9 = 0;
+        __Pyx_XDECREF_SET(__pyx_v_df, __pyx_t_8);
+        __pyx_t_8 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":144
  *                                         amount)])
  * 
- *                     df.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
+ *                     df.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
  * 
  * 
  */
-        __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_to_csv); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 144, __pyx_L1_error)
-        __Pyx_GOTREF(__pyx_t_9);
-        __pyx_t_8 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_to_csv); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 144, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_8);
-        if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_mode, __pyx_n_u_a) < 0) __PYX_ERR(0, 144, __pyx_L1_error)
-        if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_header, Py_False) < 0) __PYX_ERR(0, 144, __pyx_L1_error)
-        if (PyDict_SetItem(__pyx_t_8, __pyx_n_s_index, Py_False) < 0) __PYX_ERR(0, 144, __pyx_L1_error)
-        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_9, __pyx_tuple__2, __pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_9 = __Pyx_PyDict_NewPresized(3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 144, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        if (PyDict_SetItem(__pyx_t_9, __pyx_n_s_mode, __pyx_n_u_a) < 0) __PYX_ERR(0, 144, __pyx_L1_error)
+        if (PyDict_SetItem(__pyx_t_9, __pyx_n_s_header, Py_False) < 0) __PYX_ERR(0, 144, __pyx_L1_error)
+        if (PyDict_SetItem(__pyx_t_9, __pyx_n_s_index, Py_False) < 0) __PYX_ERR(0, 144, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__2, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 144, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
         /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":148
@@ -7917,7 +7926,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
   /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":231
  *             pass
  * 
- *         if os.path.exists('/Users/jellebuth/Documents/curvefit_hotcross.csv'):             # <<<<<<<<<<<<<<
+ *         if os.path.exists('/Users/jellebuth/Documents/curvefit_test.csv'):             # <<<<<<<<<<<<<<
  *           pass
  *         else:
  */
@@ -8000,7 +8009,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
     /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":239
  *                                         'kappa',
  *                                         'alpha')])
- *             df_header.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
+ *             df_header.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
  * 
  *         for i in range(len(lambdas_adj)):
  */
@@ -8020,7 +8029,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
   __pyx_L29:;
 
   /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":241
- *             df_header.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)
+ *             df_header.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)
  * 
  *         for i in range(len(lambdas_adj)):             # <<<<<<<<<<<<<<
  *           df = pd.DataFrame([(self._round,
@@ -8083,7 +8092,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  *                               self._kappa,
  *                               self._alpha)])             # <<<<<<<<<<<<<<
  * 
- *           df.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)
+ *           df.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)
  */
     __pyx_t_9 = PyFloat_FromDouble(__pyx_v_self->_alpha); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 247, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_9);
@@ -8147,7 +8156,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
     /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":249
  *                               self._alpha)])
  * 
- *           df.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
+ *           df.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
  *         self._round = self._round + 1
  */
     __pyx_t_14 = __Pyx_PyObject_GetAttrStr(__pyx_v_df, __pyx_n_s_to_csv); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 249, __pyx_L1_error)
@@ -8166,7 +8175,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
 
   /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":250
  * 
- *           df.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)
+ *           df.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)
  *         self._round = self._round + 1             # <<<<<<<<<<<<<<
  */
   __pyx_t_9 = __Pyx_PyInt_AddObjC(__pyx_v_self->_round, __pyx_int_1, 1, 0, 0); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 250, __pyx_L1_error)
@@ -11412,6 +11421,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {0, __pyx_k_inf, sizeof(__pyx_k_inf), 0, 0, 1, 1},
   {0, __pyx_k_info, sizeof(__pyx_k_info), 0, 0, 1, 1},
   {0, __pyx_k_initializing, sizeof(__pyx_k_initializing), 0, 0, 1, 1},
+  {0, __pyx_k_is_buy, sizeof(__pyx_k_is_buy), 0, 0, 1, 1},
   {0, __pyx_k_is_coroutine, sizeof(__pyx_k_is_coroutine), 0, 0, 1, 1},
   {0, __pyx_k_is_sampling_buffer_full, sizeof(__pyx_k_is_sampling_buffer_full), 0, 0, 1, 1},
   {0, __pyx_k_isenabled, sizeof(__pyx_k_isenabled), 0, 1, 0, 0},
@@ -11556,6 +11566,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_inf, __pyx_k_inf, sizeof(__pyx_k_inf), 0, 0, 1, 1},
   {&__pyx_n_s_info, __pyx_k_info, sizeof(__pyx_k_info), 0, 0, 1, 1},
   {&__pyx_n_s_initializing, __pyx_k_initializing, sizeof(__pyx_k_initializing), 0, 0, 1, 1},
+  {&__pyx_n_s_is_buy, __pyx_k_is_buy, sizeof(__pyx_k_is_buy), 0, 0, 1, 1},
   {&__pyx_n_s_is_coroutine, __pyx_k_is_coroutine, sizeof(__pyx_k_is_coroutine), 0, 0, 1, 1},
   {&__pyx_n_s_is_sampling_buffer_full, __pyx_k_is_sampling_buffer_full, sizeof(__pyx_k_is_sampling_buffer_full), 0, 0, 1, 1},
   {&__pyx_kp_u_isenabled, __pyx_k_isenabled, sizeof(__pyx_k_isenabled), 0, 1, 0, 0},
@@ -11665,7 +11676,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":135
  *                                                     'price_level',
  *                                                     'amount')])
- *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
+ *                         df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
  * 
  *                     df = pd.DataFrame([(timestamp,
  */
@@ -11687,7 +11698,7 @@ static CYTHON_SMALL_CODE int __Pyx_InitCachedConstants(void) {
   /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":239
  *                                         'kappa',
  *                                         'alpha')])
- *             df_header.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
+ *             df_header.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)             # <<<<<<<<<<<<<<
  * 
  *         for i in range(len(lambdas_adj)):
  */
@@ -11889,80 +11900,81 @@ static CYTHON_SMALL_CODE int __Pyx_InitGlobals(void) {
   if (__Pyx_InitString(__pyx_string_tab[66], &__pyx_n_s_inf) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   if (__Pyx_InitString(__pyx_string_tab[67], &__pyx_n_s_info) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   if (__Pyx_InitString(__pyx_string_tab[68], &__pyx_n_s_initializing) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[69], &__pyx_n_s_is_coroutine) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[70], &__pyx_n_s_is_sampling_buffer_full) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[71], &__pyx_kp_u_isenabled) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[72], &__pyx_n_u_kappa) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[73], &__pyx_n_s_keys) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[74], &__pyx_kp_u_lambdas_adj) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[75], &__pyx_n_u_lambdas_adjusted) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[76], &__pyx_kp_u_len_lamd) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[77], &__pyx_kp_u_len_price_level) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[78], &__pyx_n_s_logger) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[79], &__pyx_n_s_logging) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[80], &__pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[81], &__pyx_n_s_method) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[82], &__pyx_n_u_mid_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[83], &__pyx_n_s_mode) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[84], &__pyx_n_s_name) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[85], &__pyx_n_s_new) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[86], &__pyx_n_s_np) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[87], &__pyx_n_s_numpy) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[88], &__pyx_kp_u_numpy_core_multiarray_failed_to) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[89], &__pyx_kp_u_numpy_core_umath_failed_to_impor) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[90], &__pyx_n_s_order_book) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[91], &__pyx_n_s_os) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[92], &__pyx_n_s_p0) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[93], &__pyx_n_s_pandas) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[94], &__pyx_n_s_path) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[95], &__pyx_n_s_pd) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[96], &__pyx_n_s_pickle) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[97], &__pyx_n_s_pmm_logger) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[98], &__pyx_n_s_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[99], &__pyx_n_u_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[100], &__pyx_n_s_price_delegate) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[101], &__pyx_n_u_price_level) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[102], &__pyx_kp_u_price_levels) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[103], &__pyx_n_u_price_levels_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[104], &__pyx_n_s_pyx_PickleError) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[105], &__pyx_n_s_pyx_checksum) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[106], &__pyx_n_s_pyx_result) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[107], &__pyx_n_s_pyx_state) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[108], &__pyx_n_s_pyx_type) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[109], &__pyx_n_s_pyx_unpickle_TradesForwarder) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[110], &__pyx_n_s_pyx_unpickle_TradingIntensityI) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[111], &__pyx_n_s_pyx_vtable) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[112], &__pyx_n_s_range) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[113], &__pyx_n_s_reduce) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[114], &__pyx_n_s_reduce_cython) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[115], &__pyx_n_s_reduce_ex) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[116], &__pyx_n_s_register_trade) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[117], &__pyx_n_s_reverse) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[118], &__pyx_n_u_round) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[119], &__pyx_n_s_sampling_length) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[120], &__pyx_n_s_scipy_optimize) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[121], &__pyx_n_s_self) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[122], &__pyx_n_s_setstate) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[123], &__pyx_n_s_setstate_cython) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[124], &__pyx_n_u_side) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[125], &__pyx_n_s_simplefilter) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[126], &__pyx_n_s_sorted) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[127], &__pyx_n_s_spec) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[128], &__pyx_n_s_state) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[129], &__pyx_kp_s_stringsource) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[130], &__pyx_n_s_t) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[131], &__pyx_n_s_test) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[132], &__pyx_n_s_timestamp) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[133], &__pyx_n_u_timestamp) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[134], &__pyx_n_s_to_csv) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[135], &__pyx_n_s_trade) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[136], &__pyx_n_u_trade_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[137], &__pyx_kp_u_trades_consolidated) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[138], &__pyx_n_s_type) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[139], &__pyx_n_s_typing) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[140], &__pyx_n_s_update) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[141], &__pyx_n_s_use_setstate) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
-  if (__Pyx_InitString(__pyx_string_tab[142], &__pyx_n_s_warnings) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[69], &__pyx_n_s_is_buy) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[70], &__pyx_n_s_is_coroutine) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[71], &__pyx_n_s_is_sampling_buffer_full) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[72], &__pyx_kp_u_isenabled) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[73], &__pyx_n_u_kappa) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[74], &__pyx_n_s_keys) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[75], &__pyx_kp_u_lambdas_adj) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[76], &__pyx_n_u_lambdas_adjusted) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[77], &__pyx_kp_u_len_lamd) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[78], &__pyx_kp_u_len_price_level) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[79], &__pyx_n_s_logger) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[80], &__pyx_n_s_logging) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[81], &__pyx_n_s_main) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[82], &__pyx_n_s_method) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[83], &__pyx_n_u_mid_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[84], &__pyx_n_s_mode) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[85], &__pyx_n_s_name) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[86], &__pyx_n_s_new) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[87], &__pyx_n_s_np) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[88], &__pyx_n_s_numpy) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[89], &__pyx_kp_u_numpy_core_multiarray_failed_to) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[90], &__pyx_kp_u_numpy_core_umath_failed_to_impor) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[91], &__pyx_n_s_order_book) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[92], &__pyx_n_s_os) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[93], &__pyx_n_s_p0) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[94], &__pyx_n_s_pandas) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[95], &__pyx_n_s_path) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[96], &__pyx_n_s_pd) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[97], &__pyx_n_s_pickle) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[98], &__pyx_n_s_pmm_logger) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[99], &__pyx_n_s_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[100], &__pyx_n_u_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[101], &__pyx_n_s_price_delegate) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[102], &__pyx_n_u_price_level) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[103], &__pyx_kp_u_price_levels) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[104], &__pyx_n_u_price_levels_2) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[105], &__pyx_n_s_pyx_PickleError) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[106], &__pyx_n_s_pyx_checksum) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[107], &__pyx_n_s_pyx_result) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[108], &__pyx_n_s_pyx_state) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[109], &__pyx_n_s_pyx_type) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[110], &__pyx_n_s_pyx_unpickle_TradesForwarder) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[111], &__pyx_n_s_pyx_unpickle_TradingIntensityI) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[112], &__pyx_n_s_pyx_vtable) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[113], &__pyx_n_s_range) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[114], &__pyx_n_s_reduce) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[115], &__pyx_n_s_reduce_cython) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[116], &__pyx_n_s_reduce_ex) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[117], &__pyx_n_s_register_trade) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[118], &__pyx_n_s_reverse) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[119], &__pyx_n_u_round) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[120], &__pyx_n_s_sampling_length) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[121], &__pyx_n_s_scipy_optimize) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[122], &__pyx_n_s_self) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[123], &__pyx_n_s_setstate) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[124], &__pyx_n_s_setstate_cython) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[125], &__pyx_n_u_side) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[126], &__pyx_n_s_simplefilter) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[127], &__pyx_n_s_sorted) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[128], &__pyx_n_s_spec) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[129], &__pyx_n_s_state) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[130], &__pyx_kp_s_stringsource) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[131], &__pyx_n_s_t) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[132], &__pyx_n_s_test) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[133], &__pyx_n_s_timestamp) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[134], &__pyx_n_u_timestamp) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[135], &__pyx_n_s_to_csv) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[136], &__pyx_n_s_trade) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[137], &__pyx_n_u_trade_price) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[138], &__pyx_kp_u_trades_consolidated) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[139], &__pyx_n_s_type) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[140], &__pyx_n_s_typing) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[141], &__pyx_n_s_update) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[142], &__pyx_n_s_use_setstate) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
+  if (__Pyx_InitString(__pyx_string_tab[143], &__pyx_n_s_warnings) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   #endif
   #if !CYTHON_COMPILING_IN_LIMITED_API
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);

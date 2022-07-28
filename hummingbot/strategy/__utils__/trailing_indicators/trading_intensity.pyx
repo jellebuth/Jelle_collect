@@ -106,7 +106,7 @@ cdef class TradingIntensityIndicator:
                         latest_processed_quote_idx = i
                     #here is where we can store the data
                     trade_price = trade.price
-                    side = trade.type
+                    side = trade.type.is_buy
                     amount = trade.amount
                     price_level = abs(trade.price - float(quote["price"]))
 
@@ -123,7 +123,7 @@ cdef class TradingIntensityIndicator:
                     mid_price = quote["price"]
 
 
-                    if os.path.exists('/Users/jellebuth/Documents/tradeinfo_hotcross.csv'):
+                    if os.path.exists('/Users/jellebuth/Documents/tradeinfo_test.csv'):
                       pass
                     else:
                         df_header = pd.DataFrame([('timestamp',
@@ -132,7 +132,7 @@ cdef class TradingIntensityIndicator:
                                                     'mid_price',
                                                     'price_level',
                                                     'amount')])
-                        df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)
+                        df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
 
                     df = pd.DataFrame([(timestamp,
                                         trade_price,
@@ -141,7 +141,7 @@ cdef class TradingIntensityIndicator:
                                         price_level,
                                         amount)])
 
-                    df.to_csv('/Users/jellebuth/Documents/tradeinfo_hotcross.csv', mode='a', header=False, index=False)
+                    df.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
 
 
 
@@ -228,7 +228,7 @@ cdef class TradingIntensityIndicator:
         except (RuntimeError, ValueError) as e:
             pass
 
-        if os.path.exists('/Users/jellebuth/Documents/curvefit_hotcross.csv'):
+        if os.path.exists('/Users/jellebuth/Documents/curvefit_test.csv'):
           pass
         else:
             df_header = pd.DataFrame([('round','timestamp',
@@ -236,7 +236,7 @@ cdef class TradingIntensityIndicator:
                                         'price_levels',
                                         'kappa',
                                         'alpha')])
-            df_header.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)
+            df_header.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)
 
         for i in range(len(lambdas_adj)):
           df = pd.DataFrame([(self._round,
@@ -246,5 +246,5 @@ cdef class TradingIntensityIndicator:
                               self._kappa,
                               self._alpha)])
 
-          df.to_csv('/Users/jellebuth/Documents/curvefit_hotcross.csv', mode='a', header=False, index=False)
+          df.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)
         self._round = self._round + 1
