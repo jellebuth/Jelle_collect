@@ -77,7 +77,7 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
                     status_report_interval: float = 900,
                     hb_app_notification: bool = False,
                     debug_csv_path: str = '',
-                    is_debug: bool = False,
+                    is_debug: bool = True,
                     ):
         self._sb_order_tracker = OrderTracker()
         self._config_map = config_map
@@ -109,6 +109,8 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
         self._last_sampling_timestamp = 0
         self._alpha = None
         self._kappa = None
+        self._alpha_sell = None
+        self._kappa_sell = None
         self._execution_mode = None
         self._execution_timeframe = None
         self._execution_state = None
@@ -666,6 +668,7 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
 
         if self._is_debug:
             self.dump_debug_variables()
+            self.logger().info(f"dupm debug")
 
     cdef c_collect_market_variables(self, double timestamp):
         market, trading_pair, base_asset, quote_asset = self._market_info
@@ -681,6 +684,7 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
 
     def collect_market_variables(self, timestamp: float):
         self.c_collect_market_variables(timestamp)
+
 
     cdef double c_get_spread(self):
         cdef:
@@ -698,11 +702,12 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
 
     cdef c_measure_order_book_liquidity(self):
 
-        self._alpha, self._kappa = self._trading_intensity.current_value
+        self._alpha, self._kappa, self._alpha_sell, self._kappa_sell = self._trading_intensity.current_value
 
         self._alpha = Decimal(self._alpha)
         self._kappa = Decimal(self._kappa)
-
+        self._alpha_sell = Decimal(self._alpha_sell)
+        self._kappa_sell = Decimal(self._kappa_sell)
         if self._is_debug:
             self.logger().info(f"alpha={self._alpha:.4f} | "
                                f"kappa={self._kappa:.4f}")
@@ -1418,7 +1423,7 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
         top_ask = market.get_price(trading_pair, True)
         top_bid = market.get_price(trading_pair, False)
         mid_price = self._market_info.get_mid_price()
-        percentage_depth = Decimal(0.015)
+        percentage_depth = Decimal(0.001)
         ask_price_range = (mid_price * (Decimal(1) + percentage_depth))
         bid_price_range = (mid_price / (Decimal(1) + percentage_depth))
         volume_bid_side = order_book.get_volume_for_price(False, bid_price_range).result_volume
@@ -1441,6 +1446,8 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
 
         vol = self.get_volatility()
         mid_price_variance = vol ** 2
+        reservation_price = self._reservation_price
+
 
         inventory = Decimal(str(self.c_calculate_inventory()))
         q_target = Decimal(str(self.c_calculate_target_inventory()))
@@ -1450,10 +1457,10 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
         bid_1_5 = self.c_weighted_mid_price_1_5()[0]
         bid_1 = self.c_weighted_mid_price_1_0()[0]
         bid_0_5 = self.c_weighted_mid_price_0_5()[0]
-        bid_0_25 = self.c_weighted_mid_price_0_25()[0]
         bid_0_75 = self.c_weighted_mid_price_0_75()[0]
-        ask_0_75 = self.c_weighted_mid_price_0_75()[1]
+        bid_0_25 = self.c_weighted_mid_price_0_25()[0]
         ask_0_25 = self.c_weighted_mid_price_0_25()[1]
+        ask_0_75 = self.c_weighted_mid_price_0_75()[1]
         ask_0_5 = self.c_weighted_mid_price_0_5()[1]
         ask_1 = self.c_weighted_mid_price_1_0()[1]
         ask_1_5 = self.c_weighted_mid_price_1_5()[1]
@@ -1462,8 +1469,27 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
           pass
         else:
             df_header = pd.DataFrame([('timestamp',
-                                        'pair')])
-            df_header.to_csv('/Users/jellebuth/Documents/dump_debug.csv', mode='a', header=False, index=False)
+                                        'pair',
+                                        'mid_price',
+                                        'spread',
+                                        'volatility',
+                                        'q',
+                                        'buy_alpha',
+                                        'buy_kappa',
+                                        'sell_alpha',
+                                        'sell_kappa',
+                                        'reservation_price',
+                                        'bid_0_1',
+                                        'bid_1',
+                                        'bid_0_5',
+                                        'bid_0_75',
+                                        'bid_0_25',
+                                        'ask_0_25',
+                                        'ask_0_75',
+                                        'ask_0_5',
+                                        'ask_1',
+                                        'ask_0_1',)])
+            df_header.to_csv('/home/ec2-user/market_info_avax.csv.csv', mode='a', header=False, index=False)
 
         if self._execution_state.time_left is not None and self._execution_state.closing_time is not None:
             time_left_fraction = self._execution_state.time_left / self._execution_state.closing_time
@@ -1471,5 +1497,25 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
             time_left_fraction = None
 
         df = pd.DataFrame([(self._current_timestamp,
-                            self.trading_pair)])
-        df.to_csv('/Users/jellebuth/Documents/dump_debug.csv', mode='a', header=False, index=False)
+                            self.trading_pair,
+                            mid_price,
+                            spread,
+                            vol,
+                            q,
+                            self._alpha,
+                            self._kappa,
+                            self._alpha_sell,
+                            self._kappa_sell,
+                            reservation_price,
+                            bid_1_5,
+                            bid_1,
+                            bid_0_5,
+                            bid_0_75,
+                            bid_0_25,
+                            ask_0_25,
+                            ask_0_75,
+                            ask_0_5,
+                            ask_1,
+                            ask_1_5,
+                            )])
+        df.to_csv('/home/ec2-user/market_info_avax.csv', mode='a', header=False, index=False)

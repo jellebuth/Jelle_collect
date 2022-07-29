@@ -8,8 +8,8 @@
             "hummingbot/core/cpp/PyRef.h"
         ],
         "include_dirs": [
-            "./hummingbot/core/data_type",
-            "./hummingbot/core"
+            "./hummingbot/core",
+            "./hummingbot/core/data_type"
         ],
         "language": "c++",
         "name": "hummingbot.strategy.__utils__.trailing_indicators.trading_intensity",
@@ -8490,7 +8490,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
  *                                method='dogbox',
  *                                bounds=([0, 0], [np.inf, np.inf]))             # <<<<<<<<<<<<<<
  * 
- *             self._kappa_buy = Decimal(str(params_sell[0][1]))
+ *             self._kappa_sell = Decimal(str(params_sell[0][1]))
  */
       __pyx_t_11 = PyList_New(2); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 264, __pyx_L40_error)
       __Pyx_GOTREF(__pyx_t_11);
@@ -8547,8 +8547,8 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
       /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":266
  *                                bounds=([0, 0], [np.inf, np.inf]))
  * 
- *             self._kappa_buy = Decimal(str(params_sell[0][1]))             # <<<<<<<<<<<<<<
- *             self._alpha_buy = Decimal(str(params_sell[0][0]))
+ *             self._kappa_sell = Decimal(str(params_sell[0][1]))             # <<<<<<<<<<<<<<
+ *             self._alpha_sell = Decimal(str(params_sell[0][0]))
  * 
  */
       __Pyx_GetModuleGlobalName(__pyx_t_9, __pyx_n_s_Decimal); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 266, __pyx_L40_error)
@@ -8584,12 +8584,12 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
       }
       __pyx_t_20 = __pyx_PyFloat_AsDouble(__pyx_t_14); if (unlikely((__pyx_t_20 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 266, __pyx_L40_error)
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      __pyx_v_self->_kappa_buy = __pyx_t_20;
+      __pyx_v_self->_kappa_sell = __pyx_t_20;
 
       /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":267
  * 
- *             self._kappa_buy = Decimal(str(params_sell[0][1]))
- *             self._alpha_buy = Decimal(str(params_sell[0][0]))             # <<<<<<<<<<<<<<
+ *             self._kappa_sell = Decimal(str(params_sell[0][1]))
+ *             self._alpha_sell = Decimal(str(params_sell[0][0]))             # <<<<<<<<<<<<<<
  * 
  *         except (RuntimeError, ValueError) as e:
  */
@@ -8626,7 +8626,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
       }
       __pyx_t_20 = __pyx_PyFloat_AsDouble(__pyx_t_14); if (unlikely((__pyx_t_20 == (double)-1) && PyErr_Occurred())) __PYX_ERR(0, 267, __pyx_L40_error)
       __Pyx_DECREF(__pyx_t_14); __pyx_t_14 = 0;
-      __pyx_v_self->_alpha_buy = __pyx_t_20;
+      __pyx_v_self->_alpha_sell = __pyx_t_20;
 
       /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":258
  *             pass
@@ -8650,7 +8650,7 @@ static PyObject *__pyx_f_10hummingbot_8strategy_9__utils___19trailing_indicators
     __Pyx_XDECREF(__pyx_t_9); __pyx_t_9 = 0;
 
     /* "hummingbot/strategy/__utils__/trailing_indicators/trading_intensity.pyx":269
- *             self._alpha_buy = Decimal(str(params_sell[0][0]))
+ *             self._alpha_sell = Decimal(str(params_sell[0][0]))
  * 
  *         except (RuntimeError, ValueError) as e:             # <<<<<<<<<<<<<<
  *             pass

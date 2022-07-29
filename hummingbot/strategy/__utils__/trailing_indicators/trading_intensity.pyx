@@ -141,7 +141,7 @@ cdef class TradingIntensityIndicator:
                                                     'mid_price',
                                                     'price_level',
                                                     'amount')])
-                        df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
+                        df_header.to_csv('/home/ec2-user/trading_info_avax.csv', mode='a', header=False, index=False)
 
                     df = pd.DataFrame([(timestamp,
                                         trade_price,
@@ -150,7 +150,7 @@ cdef class TradingIntensityIndicator:
                                         price_level,
                                         amount)])
 
-                    df.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
+                    df.to_csv('/home/ec2-user/trading_info_avax.csv', mode='a', header=False, index=False)
 
 
 
@@ -263,8 +263,8 @@ cdef class TradingIntensityIndicator:
                                method='dogbox',
                                bounds=([0, 0], [np.inf, np.inf]))
 
-            self._kappa_buy = Decimal(str(params_sell[0][1]))
-            self._alpha_buy = Decimal(str(params_sell[0][0]))
+            self._kappa_sell = Decimal(str(params_sell[0][1]))
+            self._alpha_sell = Decimal(str(params_sell[0][0]))
 
         except (RuntimeError, ValueError) as e:
             pass
