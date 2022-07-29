@@ -39,8 +39,10 @@ pmm_logger = None
 cdef class TradingIntensityIndicator:
 
     def __init__(self, order_book: OrderBook, price_delegate: AssetPriceDelegate, sampling_length: int = 30):
-        self._alpha = 0
-        self._kappa = 0
+        self._alpha_buy = 0
+        self._kappa_buy = 0
+        self._alpha_sell = 0
+        self._kappa_sell = 0
         self._trade_samples = {}
         self._current_trade_sample = []
         self._trades_forwarder = TradesForwarder(self)
@@ -64,7 +66,7 @@ cdef class TradingIntensityIndicator:
 
     @property
     def current_value(self) -> Tuple[float, float]:
-        return self._alpha, self._kappa
+        return self._alpha_buy, self._kappa_buy, self._alpha_sell, self._kappa_sell
 
     @property
     def is_sampling_buffer_full(self) -> bool:
@@ -113,13 +115,12 @@ cdef class TradingIntensityIndicator:
                         latest_processed_quote_idx = i
                     #here is where we can store the data
                     trade_price = trade.price
-                    side = trade.type
                     buy = trade.type == TradeType.BUY
                     amount = trade.amount
                     price_level = abs(trade.price - float(quote["price"]))
 
 
-                    trade = {"price_level": abs(trade.price - float(quote["price"])), "amount": trade.amount} #absolute difference between the mid_price and the trade amount
+                    trade = {"price_level": abs(trade.price - float(quote["price"])), "amount": trade.amount, "buy": trade.type == TradeType.BUY} #absolute difference between the mid_price and the trade amount
 
                     if quote["timestamp"] + 1 not in self._trade_samples.keys(): #if timestamp +1 not in the trades yet, add the current trade data
                         self._trade_samples[quote["timestamp"] + 1] = []
@@ -140,7 +141,7 @@ cdef class TradingIntensityIndicator:
                                                     'mid_price',
                                                     'price_level',
                                                     'amount')])
-                        df_header.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
+                        df_header.to_csv('/home/ec2-user/trading_info_avax.csv', mode='a', header=False, index=False)
 
                     df = pd.DataFrame([(timestamp,
                                         trade_price,
@@ -149,7 +150,7 @@ cdef class TradingIntensityIndicator:
                                         price_level,
                                         amount)])
 
-                    df.to_csv('/Users/jellebuth/Documents/tradeinfo_test.csv', mode='a', header=False, index=False)
+                    df.to_csv('/home/ec2-user/trading_info_avax.csv', mode='a', header=False, index=False)
 
 
 
@@ -190,69 +191,80 @@ cdef class TradingIntensityIndicator:
             list price_levels
 
         # Calculate lambdas / trading intensities
-        lambdas = []
+        lambdas_buy = []
+        lambdas_sell = []
 
-        trades_consolidated = {} #list of price level and amount per price level
-        price_levels = [] #list of price levels
+
+        trades_consolidated_buy = {} #list of price level and amount per price level
+        price_levels_buy = [] #list of price levels
+
+        trades_consolidated_sell = {} #list of price level and amount per price level
+        price_levels_sell = [] #list of price levels
 
 
         for timestamp in self._trade_samples.keys():
             tick = self._trade_samples[timestamp] #list of timestamps + correstonding trade levels + amount at that timestamp
             for trade in tick: #tick = timetamp + the price level and amount value at that timestamp, could be multiple
-                if trade['price_level'] not in trades_consolidated.keys():  #only process if price level is not in price level already
-                    trades_consolidated[trade['price_level']] = 0
-                    price_levels += [trade['price_level']] #add the price levels
+              if trade['buy']:
+                  if trade['price_level'] not in trades_consolidated_buy.keys():  #only process if price level is not in price level already
+                      trades_consolidated_buy[trade['price_level']] = 0
+                      price_levels_buy += [trade['price_level']] #add the price levels
 
-                trades_consolidated[trade['price_level']] += trade['amount'] #add amout to the respective price level
+                  trades_consolidated_buy[trade['price_level']] += trade['amount'] #add amout to the respective price level
 
-        price_levels = sorted(price_levels, reverse=True) #just a list of all price levels but then sorted
+              if not trade['buy']:
+                  if trade['price_level'] not in trades_consolidated_sell.keys():  #only process if price level is not in price level already
+                      trades_consolidated_sell[trade['price_level']] = 0
+                      price_levels_sell += [trade['price_level']] #add the price levels
 
+                  trades_consolidated_sell[trade['price_level']] += trade['amount'] #add amout to the respective price level
 
-        self.logger().info(f"trades_consolidated {trades_consolidated}")
-        for price_level in price_levels: #price levels are all unique price levels
+        price_levels_buy = sorted(price_levels_buy, reverse=True) #just a list of all price levels but then sorted
+        price_levels_sell = sorted(price_levels_sell, reverse=True) #just a list of all price levels but then sorted
 
-            lambdas += [trades_consolidated[price_level]] #list or amounts from the trades_consolidated dict sorted from lowest price level to highest
+        for price_level in price_levels_buy: #price levels are all unique price levels
+
+            lambdas_buy += [trades_consolidated_buy[price_level]] #list or amounts from the trades_consolidated dict sorted from lowest price level to highest
+
+        for price_level in price_levels_sell: #price levels are all unique price levels
+
+            lambdas_sell += [trades_consolidated_sell[price_level]] #list or amounts from the trades_consolidated dict sorted from lowest price level to highest
 
 
         # Adjust to be able to calculate log
-        lambdas_adj = [10**-10 if x==0 else x for x in lambdas] #same values as lambdas
-        self.logger().info(f"lambdas_adj  {lambdas_adj} price_levels {price_levels} len lamd {len(lambdas_adj)} len price_level {len(price_levels)}")
+        lambdas_adj_buy = [10**-10 if x==0 else x for x in lambdas_buy] #same values as lambdas
+        lambdas_adj_sell = [10**-10 if x==0 else x for x in lambdas_sell] #same values as lambdas
+        self.logger().info(f"lambdas_adj_buy  {len(lambdas_adj_buy)} price_levels buy {len(price_levels_buy)}")
+        self.logger().info(f"lambdas_adj_sell  {len(lambdas_adj_sell)} price_levels {len(price_levels_sell)}")
 
         #experimental
 
 
         # Fit the probability density function; reuse previously calculated parameters as initial values
         try:
-            params = curve_fit(lambda t, a, b: a*np.exp(-b*t),
-                               price_levels,
-                               lambdas_adj,
-                               p0=(self._alpha, self._kappa),
+            params_buy = curve_fit(lambda t, a, b: a*np.exp(-b*t),
+                               price_levels_buy,
+                               lambdas_adj_buy,
+                               p0=(self._alpha_buy, self._kappa_buy),
                                method='dogbox',
                                bounds=([0, 0], [np.inf, np.inf]))
 
-            self._kappa = Decimal(str(params[0][1]))
-            self._alpha = Decimal(str(params[0][0]))
+            self._kappa_buy = Decimal(str(params_buy[0][1]))
+            self._alpha_buy = Decimal(str(params_buy[0][0]))
 
         except (RuntimeError, ValueError) as e:
             pass
 
-        if os.path.exists('/Users/jellebuth/Documents/curvefit_test.csv'):
-          pass
-        else:
-            df_header = pd.DataFrame([('round','timestamp',
-                                        'lambdas_adjusted',
-                                        'price_levels',
-                                        'kappa',
-                                        'alpha')])
-            df_header.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)
+        try:
+            params_sell = curve_fit(lambda t, a, b: a*np.exp(-b*t),
+                               price_levels_sell,
+                               lambdas_adj_sell,
+                               p0=(self._alpha_sell, self._kappa_sell),
+                               method='dogbox',
+                               bounds=([0, 0], [np.inf, np.inf]))
 
-        for i in range(len(lambdas_adj)):
-          df = pd.DataFrame([(self._round,
-                              self._current_timestamp,
-                              lambdas_adj[i],
-                              price_levels[i],
-                              self._kappa,
-                              self._alpha)])
+            self._kappa_sell = Decimal(str(params_sell[0][1]))
+            self._alpha_sell = Decimal(str(params_sell[0][0]))
 
-          df.to_csv('/Users/jellebuth/Documents/curvefit_test.csv', mode='a', header=False, index=False)
-        self._round = self._round + 1
+        except (RuntimeError, ValueError) as e:
+            pass
