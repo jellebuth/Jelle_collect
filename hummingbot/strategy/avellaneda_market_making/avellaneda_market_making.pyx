@@ -1355,7 +1355,7 @@ cdef class AvellanedaMarketMakingStrategy(StrategyBase):
           top_ask = market.get_price(trading_pair, True)
           top_bid = market.get_price(trading_pair, False)
           mid_price = self._market_info.get_mid_price()
-          percentage_depth = Decimal(0.075)
+          percentage_depth = Decimal(0.0075)
           ask_price_range = (mid_price * (Decimal(1) + percentage_depth))
           bid_price_range = (mid_price / (Decimal(1) + percentage_depth))
           volume_bid_side = order_book.get_volume_for_price(False, bid_price_range).result_volume
